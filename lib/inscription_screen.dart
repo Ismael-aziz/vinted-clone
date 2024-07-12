@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 
-class InscriptionScreen extends StatelessWidget {
+class InscriptionScreen extends StatefulWidget {
+  @override
+  _InscriptionScreenState createState() => _InscriptionScreenState();
+}
+
+class _InscriptionScreenState extends State<InscriptionScreen> {
+  bool _checkbox1 = false;
+  bool _checkbox2 = false;
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,20 +56,27 @@ class InscriptionScreen extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             TextField(
-              obscureText: true,
+              obscureText: _obscureText,
               decoration: InputDecoration(
                 hintText: 'Mot de passe',
                 border: UnderlineInputBorder(),
-                suffixIcon: Icon(Icons.visibility_off),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ),
               ),
             ),
             SizedBox(height: 16.0),
             Row(
               children: [
                 Checkbox(
-                  value: false,
+                  value: _checkbox1,
                   onChanged: (bool? value) {
-                    // Action pour la case à cocher
+                    setState(() {
+                      _checkbox1 = value!;
+                    });
                   },
                 ),
                 Expanded(
@@ -67,9 +89,11 @@ class InscriptionScreen extends StatelessWidget {
             Row(
               children: [
                 Checkbox(
-                  value: false,
+                  value: _checkbox2,
                   onChanged: (bool? value) {
-                    // Action pour la case à cocher
+                    setState(() {
+                      _checkbox2 = value!;
+                    });
                   },
                 ),
                 Expanded(
@@ -103,22 +127,25 @@ class InscriptionScreen extends StatelessWidget {
               onPressed: () {
                 // Action pour le bouton d'inscription
               },
-              child: Text("S'inscrire"),
+              child: Text("S'inscrire", style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 backgroundColor: Colors.teal,
-                minimumSize: Size(double.infinity, 48), // Largeur infinie et hauteur de 48
+                minimumSize: Size(250, 48),
               ),
             ),
-            Spacer(flex: 3),
+            Spacer(flex: 30),
             Align(
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: () {
                   // Action pour un problème
                 },
-                child: Text('Un problème ?'),
+                child: Text('Un problème ?', style: TextStyle(color: Colors.teal)),
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Colors.white,
                 ),
               ),
             ),

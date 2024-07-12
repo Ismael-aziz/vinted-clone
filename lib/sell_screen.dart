@@ -39,14 +39,14 @@ class _SellScreenState extends State<SellScreen> {
           Center(
             child: Text(
               'Jusqu\'à 20 photos. Voir astuces',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           SizedBox(height: 16.0),
           Center(
             child: ElevatedButton(
               onPressed: _pickImage,
-              child: Text('+ Ajouter photos'),
+              child: Text('+ Ajouter photos',style: TextStyle(color: Colors.white),),
             ),
           ),
           if (_image != null)
@@ -120,9 +120,9 @@ class _SellScreenState extends State<SellScreen> {
     ),
     ),
     ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 10.0),
           Text(
-            'Un vendeur professionnel se faisant passer pour un consommateur ou un non-professionnel sur Vinted encourt les sanctions prévues à l\'Article L. 132-2 du Code de la Consommation.',
+            'Un vendeur professionnel se faisant passer pour un consommateur ou un non-professionnel sur Vinted encourt des sanctions',
             style: TextStyle(color: Colors.grey),
             textAlign: TextAlign.center,
           ),

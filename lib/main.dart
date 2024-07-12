@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
@@ -8,6 +9,7 @@ import 'inscription_screen.dart';
 import 'login_screen.dart';
 import 'messages_screen.dart';
 import 'profile_screen.dart';
+import 'article_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +28,6 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
       routes: {
-
         '/acceuil': (context) => AccueilScreen(),
         '/home': (context) => HomeScreen(),
         '/inscription': (context) => InscriptionScreen(),
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           HomeContent(),
           SearchScreen(),
-          SellScreen(),  // Retirez 'const' ici
+          SellScreen(),
           MessagesScreen(),
           ProfileScreen(),
         ],
@@ -88,4 +89,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
