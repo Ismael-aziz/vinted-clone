@@ -1,5 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
 import 'sell_screen.dart';
@@ -11,7 +13,12 @@ import 'messages_screen.dart';
 import 'profile_screen.dart';
 import 'article_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 

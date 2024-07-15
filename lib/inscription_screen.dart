@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InscriptionScreen extends StatefulWidget {
+  const InscriptionScreen({super.key});
+
   @override
   _InscriptionScreenState createState() => _InscriptionScreenState();
 }
 
 class _InscriptionScreenState extends State<InscriptionScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _checkbox1 = false;
   bool _checkbox2 = false;
   bool _obscureText = true;
@@ -16,6 +23,45 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
     });
   }
 
+  Future<void> _register(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      // Enregistrement des données utilisateur dans Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'name': _nameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text.trim(),
+        // Ajoutez d'autres champs si nécessaire
+      });
+
+      // Affichage d'un message de succès
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Inscription réussie')),
+      );
+
+      // Navigation vers l'écran de connexion après inscription réussie
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      // Gestion des erreurs lors de l'inscription
+      print('Erreur lors de l\'inscription: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erreur lors de l\'inscription')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,42 +70,48 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 40), // Ajoute de l'espace en haut
+            const SizedBox(height: 40), // Espace en haut
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pushNamed(context, '/acceuil');
                   },
                 ),
-                SizedBox(width: 8),
-                Text(
+                const SizedBox(width: 8),
+                const Text(
                   "S'inscrire",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            Spacer(flex: 2),
+            const Spacer(flex: 2),
             TextField(
-              decoration: InputDecoration(
+              key: const Key('nameField'), // Clé pour gérer l'état du champ
+              controller: _nameController,
+              decoration: const InputDecoration(
                 hintText: "Nom d'utilisateur",
                 border: UnderlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
-              decoration: InputDecoration(
+              key: const Key('emailField'), // Clé pour gérer l'état du champ
+              controller: _emailController,
+              decoration: const InputDecoration(
                 hintText: 'Adresse email',
                 border: UnderlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
+              key: const Key('passwordField'), // Clé pour gérer l'état du champ
+              controller: _passwordController,
               obscureText: _obscureText,
               decoration: InputDecoration(
                 hintText: 'Mot de passe',
-                border: UnderlineInputBorder(),
+                border: const UnderlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -68,7 +120,7 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               children: [
                 Checkbox(
@@ -79,7 +131,7 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                     });
                   },
                 ),
-                Expanded(
+                const Expanded(
                   child: Text(
                     "Je souhaite recevoir par e-mail des offres personnalisées et les dernières mises à jour de Vinted.",
                   ),
@@ -98,7 +150,7 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                 ),
                 Expanded(
                   child: RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: "En t'inscrivant, tu confirmes que tu acceptes les ",
                       style: TextStyle(color: Colors.black),
                       children: [
@@ -122,31 +174,29 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                // Action pour le bouton d'inscription
-              },
-              child: Text("S'inscrire", style: TextStyle(color: Colors.white)),
+              onPressed: () => _register(context),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
                 backgroundColor: Colors.teal,
-                minimumSize: Size(250, 48),
+                minimumSize: const Size(250, 48),
               ),
+              child: const Text("S'inscrire", style: TextStyle(color: Colors.white)),
             ),
-            Spacer(flex: 30),
+            const Spacer(flex: 30),
             Align(
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: () {
                   // Action pour un problème
                 },
-                child: Text('Un problème ?', style: TextStyle(color: Colors.teal)),
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
                 ),
+                child: const Text('Un problème ?', style: TextStyle(color: Colors.teal)),
               ),
             ),
           ],
@@ -154,10 +204,4 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: InscriptionScreen(),
-  ));
 }

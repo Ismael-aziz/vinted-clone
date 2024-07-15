@@ -12,7 +12,7 @@ class _SellScreenState extends State<SellScreen> {
   final picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
