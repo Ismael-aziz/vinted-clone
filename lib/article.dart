@@ -1,26 +1,32 @@
-// article.dart
 class Article {
   final String title;
   final String size;
-  final String oldPrice;
-  final String newPrice;
-  final String imageUrl;
+  final int oldPrice;
+  final int newPrice;
   final int likes;
   final String seller;
-  final double rating;
   final int reviews;
-  final bool isNew;
+  final int rating;
+  final List<String> photos; // Nouvelle liste de photos
+  final String description; // Nouvelle description
+  final String category; // Nouvelle catégorie
+  final String brand; // Nouvelle marque
+  final String condition;
+  final String id; // Nouvel état// Nouvel état
 
-  Article({
+  const Article({
     required this.title,
     required this.size,
     required this.oldPrice,
     required this.newPrice,
-    required this.imageUrl,
     required this.likes,
     required this.seller,
-    required this.rating,
     required this.reviews,
-    required this.isNew,
+    required this.rating,
+    required this.photos, // Initialisation de la liste de photos
+    required this.description, // Initialisation de la description
+    required this.category, // Initialisation de la catégorie
+    required this.brand, // Initialisation de la marque
+    required this.condition, required this.id, // Initialisation de l'état
   });
 }

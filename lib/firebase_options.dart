@@ -41,46 +41,52 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA6uYEG5xKfR1Pw895VwevOj2dPLyZu-24',
-    appId: '1:16750052925:web:f4357cf51425a1176a4c54',
-    messagingSenderId: '16750052925',
-    projectId: 'vinted-osc-db310',
-    authDomain: 'vinted-osc-db310.firebaseapp.com',
-    storageBucket: 'vinted-osc-db310.appspot.com',
+    apiKey: 'AIzaSyDfwqs7yTOrf-NRlUOkgKb-IaIV-GXDeu0',
+    appId: '1:132922718628:web:182fe848cfb3d1c315e931',
+    messagingSenderId: '132922718628',
+    projectId: 'vinted-osc-bfb4d',
+    authDomain: 'vinted-osc-bfb4d.firebaseapp.com',
+    databaseURL: 'https://vinted-osc-bfb4d-default-rtdb.firebaseio.com',
+    storageBucket: 'vinted-osc-bfb4d.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCKcFS3jK5eeg166QjrX9MonkODa7X2b4A',
-    appId: '1:16750052925:android:2566e5a62c671a606a4c54',
-    messagingSenderId: '16750052925',
-    projectId: 'vinted-osc-db310',
-    storageBucket: 'vinted-osc-db310.appspot.com',
+    apiKey: 'AIzaSyBTJIDnqEPQOOMUEaewKPQ2MqBd4SPa628',
+    appId: '1:132922718628:android:e6bb2683315e781815e931',
+    messagingSenderId: '132922718628',
+    projectId: 'vinted-osc-bfb4d',
+    databaseURL: 'https://vinted-osc-bfb4d-default-rtdb.firebaseio.com',
+    storageBucket: 'vinted-osc-bfb4d.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBsja6quejYoQKzNiVUVC3aTLdiUq7p6FU',
-    appId: '1:16750052925:ios:b215a1e9f055bcde6a4c54',
-    messagingSenderId: '16750052925',
-    projectId: 'vinted-osc-db310',
-    storageBucket: 'vinted-osc-db310.appspot.com',
+    apiKey: 'AIzaSyDl8w3ym_MFXQhm3LJUKQsL6_EWnILa1uA',
+    appId: '1:132922718628:ios:431897bab97f997a15e931',
+    messagingSenderId: '132922718628',
+    projectId: 'vinted-osc-bfb4d',
+    databaseURL: 'https://vinted-osc-bfb4d-default-rtdb.firebaseio.com',
+    storageBucket: 'vinted-osc-bfb4d.appspot.com',
     iosBundleId: 'com.example.vinted',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBsja6quejYoQKzNiVUVC3aTLdiUq7p6FU',
-    appId: '1:16750052925:ios:b215a1e9f055bcde6a4c54',
-    messagingSenderId: '16750052925',
-    projectId: 'vinted-osc-db310',
-    storageBucket: 'vinted-osc-db310.appspot.com',
+    apiKey: 'AIzaSyDl8w3ym_MFXQhm3LJUKQsL6_EWnILa1uA',
+    appId: '1:132922718628:ios:431897bab97f997a15e931',
+    messagingSenderId: '132922718628',
+    projectId: 'vinted-osc-bfb4d',
+    databaseURL: 'https://vinted-osc-bfb4d-default-rtdb.firebaseio.com',
+    storageBucket: 'vinted-osc-bfb4d.appspot.com',
     iosBundleId: 'com.example.vinted',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA6uYEG5xKfR1Pw895VwevOj2dPLyZu-24',
-    appId: '1:16750052925:web:fce9e311266740096a4c54',
-    messagingSenderId: '16750052925',
-    projectId: 'vinted-osc-db310',
-    authDomain: 'vinted-osc-db310.firebaseapp.com',
-    storageBucket: 'vinted-osc-db310.appspot.com',
+    apiKey: 'AIzaSyDfwqs7yTOrf-NRlUOkgKb-IaIV-GXDeu0',
+    appId: '1:132922718628:web:83b1ac099fd2996c15e931',
+    messagingSenderId: '132922718628',
+    projectId: 'vinted-osc-bfb4d',
+    authDomain: 'vinted-osc-bfb4d.firebaseapp.com',
+    databaseURL: 'https://vinted-osc-bfb4d-default-rtdb.firebaseio.com',
+    storageBucket: 'vinted-osc-bfb4d.appspot.com',
   );
+
 }

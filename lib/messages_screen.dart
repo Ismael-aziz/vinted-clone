@@ -47,41 +47,54 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     });
   }
 
+  Future<bool> _onWillPop() async {
+    if (_selectedIndex != 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: const [
-          Center(child: Text('Accueil')),
-          Center(child: Text('Rechercher')),
-          Center(child: Text('Vendre')),
-          MessagesScreen(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Rechercher'),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Vendre'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal[700],
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-      ),
-      floatingActionButton: _selectedIndex == 3
-          ? ScaleTransition(
-        scale: _animationController,
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.teal,
-          child: const Icon(Icons.edit),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: const [
+            Center(child: Text('Accueil')),
+            Center(child: Text('Rechercher')),
+            Center(child: Text('Vendre')),
+            MessagesScreen(),
+          ],
         ),
-      )
-          : null,
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Rechercher'),
+            BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Vendre'),
+            BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color(0xFF006E78),
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+        ),
+        floatingActionButton: _selectedIndex == 3
+            ? ScaleTransition(
+          scale: _animationController,
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Color(0xFF006E78),
+            child: const Icon(Icons.edit),
+          ),
+        )
+            : null,
+      ),
     );
   }
 }
@@ -95,6 +108,7 @@ class MessagesScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Messages'),
@@ -136,4 +150,3 @@ class NoContentWidget extends StatelessWidget {
     );
   }
 }
-

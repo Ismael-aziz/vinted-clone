@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class InscriptionScreen extends StatefulWidget {
-  const InscriptionScreen({super.key});
+  const InscriptionScreen({Key? key}) : super(key: key);
 
   @override
   _InscriptionScreenState createState() => _InscriptionScreenState();
@@ -17,40 +18,73 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
   bool _checkbox2 = false;
   bool _obscureText = true;
 
+  String? _errorMessage;
+
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
 
+  bool _validateEmail(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _validateFields() {
+    if (_nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        !_validateEmail(_emailController.text) ||
+        !_checkbox2) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _register(BuildContext context) async {
+    if (!_validateFields()) {
+      setState(() {
+        _errorMessage = 'Veuillez remplir tous les champs';
+      });
+      return;
+    }
+
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
 
-      // Enregistrement des données utilisateur dans Firestore
+      // Ajouter l'utilisateur à Firestore avec un solde par défaut de 0
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
         'name': _nameController.text.trim(),
         'email': _emailController.text.trim(),
         'password': _passwordController.text.trim(),
-        // Ajoutez d'autres champs si nécessaire
+        'solde': 0,  // Solde par défaut
       });
 
-      // Affichage d'un message de succès
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Inscription réussie')),
       );
 
-      // Navigation vers l'écran de connexion après inscription réussie
       Navigator.pushReplacementNamed(context, '/login');
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        if (e.code == 'email-already-in-use') {
+          _errorMessage = 'Cette adresse e-mail est déjà utilisée.';
+        } else if (e.code == 'invalid-email') {
+          _errorMessage = 'L\'adresse e-mail est invalide.';
+        } else if (e.code == 'weak-password') {
+          _errorMessage = 'Le mot de passe est trop faible.';
+        } else {
+          _errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+        }
+      });
     } catch (e) {
-      // Gestion des erreurs lors de l'inscription
-      print('Erreur lors de l\'inscription: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur lors de l\'inscription')),
-      );
+      setState(() {
+        _errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+      });
     }
   }
 
@@ -70,7 +104,7 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 40), // Espace en haut
+            const SizedBox(height: 38), // Espace en haut
             Row(
               children: [
                 IconButton(
@@ -79,34 +113,37 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                     Navigator.pushNamed(context, '/acceuil');
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 const Text(
                   "S'inscrire",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             const Spacer(flex: 2),
             TextField(
-              key: const Key('nameField'), // Clé pour gérer l'état du champ
+              key: const Key('nameField'),
               controller: _nameController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: "Nom d'utilisateur",
-                border: UnderlineInputBorder(),
+                border: const UnderlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             TextField(
-              key: const Key('emailField'), // Clé pour gérer l'état du champ
+              key: const Key('emailField'),
               controller: _emailController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Adresse email',
-                border: UnderlineInputBorder(),
+                border: const UnderlineInputBorder(),
+                errorText: !_validateEmail(_emailController.text) && _emailController.text.isNotEmpty
+                    ? 'L\'adresse e-mail est invalide.'
+                    : null,
               ),
             ),
             const SizedBox(height: 16.0),
             TextField(
-              key: const Key('passwordField'), // Clé pour gérer l'état du champ
+              key: const Key('passwordField'),
               controller: _passwordController,
               obscureText: _obscureText,
               decoration: InputDecoration(
@@ -174,7 +211,14 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 10.0),
+            if (_errorMessage != null)
+              Text(
+                _errorMessage!,
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: 9.0),
             ElevatedButton(
               onPressed: () => _register(context),
               style: ElevatedButton.styleFrom(
@@ -182,11 +226,11 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 backgroundColor: Colors.teal,
-                minimumSize: const Size(250, 48),
+                minimumSize: const Size(240, 48),
               ),
               child: const Text("S'inscrire", style: TextStyle(color: Colors.white)),
             ),
-            const Spacer(flex: 30),
+            const Spacer(flex: 28),
             Align(
               alignment: Alignment.center,
               child: TextButton(
@@ -194,7 +238,7 @@ class _InscriptionScreenState extends State<InscriptionScreen> {
                   // Action pour un problème
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.white30,
                 ),
                 child: const Text('Un problème ?', style: TextStyle(color: Colors.teal)),
               ),

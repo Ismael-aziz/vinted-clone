@@ -62,6 +62,15 @@ class AccueilScreen extends StatelessWidget {
     );
   }
 
+  void _showUnavailableMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Le bouton n\'est pas disponible mais nous y travaillons.'),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +99,7 @@ class AccueilScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => _showSignUpOptions(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Color(0xFF006E78),
                   padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 12),
                   textStyle: const TextStyle(color: Colors.white),
                   shape: RoundedRectangleBorder(
@@ -119,7 +128,9 @@ class AccueilScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showUnavailableMessage(context);
+                },
                 child: const Text(
                   'À propos de Vinted : Notre plateforme',
                   style: TextStyle(

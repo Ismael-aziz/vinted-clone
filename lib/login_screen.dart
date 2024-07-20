@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
-  final _formKey = GlobalKey<FormState>(); // Clé pour le formulaire
+  final _formKey = GlobalKey<FormState>();
 
   String? _validateEmail(String? value) {
-    // Vérification de la validité de l'email
     if (value == null || value.isEmpty) {
       return 'Veuillez entrer votre email.';
     }
@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? _validatePassword(String? value) {
-    // Vérification de la validité du mot de passe
     if (value == null || value.isEmpty) {
       return 'Veuillez entrer votre mot de passe.';
     }
@@ -33,32 +32,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> loginUser(String email, String password) async {
-    final String apiUrl = "http://127.0.0.1:8000/api/login/";
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
-        "email": email,
-        "password": password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final responseJson = jsonDecode(response.body);
-      if (responseJson['success']) {
-        // Naviguer vers la page d'accueil après une connexion réussie
+      if (userCredential.user != null) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Échec de la connexion')),
+          const SnackBar(content: Text('Échec de la connexion')),
         );
       }
-    } else {
-      throw Exception('Failed to login');
+    } catch (e) {
+      print('Erreur lors de la connexion: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Échec de la connexion')),
+      );
     }
+  }
+
+  void _showUnavailableMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -71,17 +72,17 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 40), // Ajoute de l'espace en haut
+              const SizedBox(height: 40), // Ajoute de l'espace en haut
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pushNamed(context, '/acceuil');
                     },
                   ),
-                  SizedBox(width: 8),
-                  Text(
+                  const SizedBox(width: 8),
+                  const Text(
                     "Se connecter",
                     style: TextStyle(
                       fontSize: 18,
@@ -90,22 +91,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              Spacer(flex: 2),
+              const Spacer(flex: 2),
               TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Identifiant ou adresse email',
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  hintText: 'Adresse email',
                   border: OutlineInputBorder(),
                 ),
                 validator: _validateEmail,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: _obscureText,
                 decoration: InputDecoration(
                   hintText: 'Mot de passe',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -119,42 +120,42 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 validator: _validatePassword,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    final String email = emailController.text;
-                    final String password = passwordController.text;
+                    final String email = _emailController.text.trim();
+                    final String password = _passwordController.text;
                     loginUser(email, password);
                   }
                 },
-                child: Text('Se connecter', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  backgroundColor: Colors.teal,
-                  minimumSize: Size(double.infinity, 48), // Largeur infinie et hauteur de 48
+                  backgroundColor: Color(0xFF006E78),
+                  minimumSize: const Size(double.infinity, 48), // Largeur infinie et hauteur de 48
                 ),
+                child: const Text('Se connecter', style: TextStyle(color: Colors.white)),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    // Action pour mot de passe oublié
+                    _showUnavailableMessage(context, 'Fonctionnalité de réinitialisation de mot de passe en cours de développement.');
                   },
-                  child: Text('Mot de passe oublié ?', style: TextStyle(color: Colors.teal)),
+                  child: const Text('Mot de passe oublié ?', style: TextStyle(color: Color(0xFF006E78))),
                 ),
               ),
-              Spacer(flex: 30),
+              const Spacer(flex: 30),
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                    // Action pour un problème
+                    _showUnavailableMessage(context, 'Fonctionnalité de signalement de problème en cours de développement.');
                   },
-                  child: Text('Un problème ?', style: TextStyle(color: Colors.teal)),
+                  child: const Text('Un problème ?', style: TextStyle(color: Color(0xFF006E78))),
                 ),
               ),
             ],

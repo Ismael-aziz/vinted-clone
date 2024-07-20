@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "16750052925",
-    "project_id": "vinted-osc-db310",
-    "storage_bucket": "vinted-osc-db310.appspot.com"
+    "project_number": "132922718628",
+    "firebase_url": "https://vinted-osc-bfb4d-default-rtdb.firebaseio.com",
+    "project_id": "vinted-osc-bfb4d",
+    "storage_bucket": "vinted-osc-bfb4d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:16750052925:android:2566e5a62c671a606a4c54",
+        "mobilesdk_app_id": "1:132922718628:android:e6bb2683315e781815e931",
         "android_client_info": {
           "package_name": "com.example.vinted"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCKcFS3jK5eeg166QjrX9MonkODa7X2b4A"
+          "current_key": "AIzaSyBTJIDnqEPQOOMUEaewKPQ2MqBd4SPa628"
         }
       ],
       "services": {

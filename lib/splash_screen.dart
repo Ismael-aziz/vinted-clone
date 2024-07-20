@@ -10,7 +10,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 6), () {
       Navigator.pushReplacementNamed(context, '/acceuil');
     });
   }
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             SizedBox(height: 20),
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF006E78)),
             ),
           ],
         ),

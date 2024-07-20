@@ -1,6 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
@@ -11,12 +12,17 @@ import 'inscription_screen.dart';
 import 'login_screen.dart';
 import 'messages_screen.dart';
 import 'profile_screen.dart';
-import 'article_screen.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.playIntegrity,
+    appleProvider: AppleProvider.appAttest,
   );
 
   runApp(const MyApp());
@@ -35,10 +41,11 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
       routes: {
-        '/acceuil': (context) => AccueilScreen(),
-        '/home': (context) => HomeScreen(),
-        '/inscription': (context) => InscriptionScreen(),
-        '/login': (context) => LoginScreen(),
+        '/acceuil': (context) => const AccueilScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/inscription': (context) => const InscriptionScreen(),
+        '/login': (context) => const LoginScreen(),
       },
     );
   }
@@ -73,11 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         children: [
-          HomeContent(),
-          SearchScreen(),
+           HomeContent(),
+          const SearchScreen(),
           SellScreen(),
-          MessagesScreen(),
-          ProfileScreen(),
+          const MessagesScreen(),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
